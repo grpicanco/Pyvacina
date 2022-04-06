@@ -1,0 +1,30 @@
+{% extends "templates.html" %}
+{% block conteudo %}
+<table class="table table-striped table-responsive table-bordered">
+    <thead class="thead-default">
+    <tr>
+        <th>Nome</th>
+        <th>Nascimento</th>
+        <th>CPF</th>
+        <th>CNS</th>
+        <th>Comorbidade</th>
+        <th>Quant. Doses</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vacinado in vacinados %}
+    <tr>
+        <td>{{ vacinado.nome }}</td>
+        <td>{{ vacinado.dtNascimento }}</td>
+        <td>{{ vacinado.cpf }}</td>
+        <td>{{ vacinado.cns }}</td>
+        <td>{{ vacinado.comorbidade }}</td>
+        <td>{{ vacinado.qtdDose }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<form action="{{ url_for('novo')}}">
+    <button class="btn btn-primary" type="submit">Cadastrar</button>
+</form>
+{% endblock %}
