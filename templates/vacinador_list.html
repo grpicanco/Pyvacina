@@ -16,10 +16,10 @@
         <td>{{ vacinador.nome }}</td>
         <td>{{ vacinador.dtNascimento.strftime('%d/%m/%Y') }}</td>
         <td>{{ vacinador.cpf }}</td>
-        <td>{{ vacinador.crm }}</td>
+        <td>{{ vacinador.crmtemplate }}</td>
         <td>
-            <a href="{{ url_for('vacinador_editar', crm=vacinador.crm) }}" class="btn btn-warning">editar</a>
-            <a href="{{ url_for('vacinador_excluir', crm=vacinador.crm) }}" class="btn btn-danger">excluir</a>
+            <a href="{{ url_for('vacinador_editar', crm= vacinador.crm) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('vacinador_excluir', crm= vacinador.crm) }}" class="btn btn-danger">excluir</a>
         </td>
     </tr>
     {% endfor %}

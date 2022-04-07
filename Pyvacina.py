@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from DAO.daoVacinador import VacinadorDao
 from DAO.daoVacinado import VacinadoDao
 from model import Vacinado, Vacinador
+import re
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -23,6 +24,7 @@ def index():
 def vacinado():
     lista = vacinado_dao.listar()
     return render_template('vacinado_lista.html', titulo='Vacinados', vacinados=lista)
+
 
 @app.route('/vacinado/novo')
 def vacinado_novo():
@@ -49,20 +51,6 @@ def vacinado_editar(cns):
     return render_template('vacinado_editar.html', titulo='Editando Vacinado', vacinado=vacinado)
 
 
-@app.route('/atualizar', methods=['POST', ])
-def vacinado_atualizaar():
-    nome = request.form['nome']
-    cpf = request.form['cpf']
-    cns = request.form['cns']
-    dtnascimento = date(request.form['nascimento'])
-    comorbidade = bool(request.form['comorbidade'])
-    qtdDose = int(request.form['dose'])
-    vacinado = Vacinado(nome=nome, cpf=cpf, cns=cns, dtNascimento=dtnascimento, comorbidade=comorbidade,
-                        qtdDose=qtdDose)
-    vacinado_dao.salvar(vacinado)
-    return redirect(url_for('vacinado'))
-
-
 @app.route('/excluir/<string:cns>')
 def vacinado_excluir(cns):
     vacinado_dao.deletar(cns)
@@ -73,29 +61,45 @@ def vacinado_excluir(cns):
 @app.route('/vacinador')
 def vacinador():
     lista = vacinador_dao.listar()
+    for vacinador in lista:
+        vacinador.crmtemplate = vacinador.crm
     return render_template('vacinador_list.html', titulo="Lista de vacinadores", vacinadores=lista)
+
 
 @app.route('/vacinador/novo')
 def vacinador_novo():
     return render_template("vacinador_novo.html", titulo="Novo vacinador")
 
+
 @app.route('/vacinador/criar', methods=['POST', ])
 def vacinador_criar():
     nome = request.form['nome']
     cpf = request.form['cpf']
-    crm = request.form['crm']
-    dt_nascimento = request.form['nascimento']
+    crm = add_crm_banco(request.form['crm'])
+    dt_nascimento = datetime.strptime(request.form['nascimento'], '%Y-%m-%d').date()
     vacinador = Vacinador(nome=nome, cpf=cpf, crm=crm, dtNascimento=dt_nascimento)
     vacinador_dao.salvar(vacinador)
     return redirect(url_for('vacinador'))
 
+
+def add_crm_banco(param: str) -> str:
+    param = param.strip().upper()
+    crm = re.search("([A-Z]{3})(/)([A-Z]{2})([0-9]{6})", param)
+    crm = crm.group(1) + crm.group(3) + crm.group(4)
+    return crm
+
+
 @app.route('/vacinador/editar/<string:crm>')
 def vacinador_editar(crm):
-    pass
+    vacinador = vacinador_dao.busca_por_crm(crm)
+    vacinador.crmtemplate = vacinador.crm
+    return render_template("vacinador_editar.html", titulo="Editando Vacinador", vacinador=vacinador)
+
 
 @app.route('/vacinador/excluir/<string:crm>')
 def vacinador_excluir(crm):
-    pass
+    vacinador_dao.deletar(crm)
+    return redirect(url_for('vacinador'))
 
 
 app.run(debug=True)

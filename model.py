@@ -1,5 +1,6 @@
 import time
 from datetime import datetime, date
+import re
 
 
 class Vacinado:
@@ -61,12 +62,12 @@ class Vacinado:
 
 
 class Vacinador:
-    def __init__(self, nome, cpf, crm, dtNascimento):
+    def __init__(self, nome, cpf, crm, dtNascimento, template=None):
         self.__nome = nome
         self.__cpf = cpf
         self.__crm = crm
         self.__dtNasciento = dtNascimento
-
+        self.__crmtemplate = template
 
     @property
     def nome(self) -> str:
@@ -100,3 +101,34 @@ class Vacinador:
     def dtNascimento(self, param: datetime):
         self.__dtNasciento = param
 
+    @property
+    def crmtemplate(self) -> str:
+        return self.__crmtemplate
+
+    @crmtemplate.setter
+    def crmtemplate(self, param):
+        txt = re.search("([A-Z|a-z]{3})([A-Z|a-z]{2})([0-9]{6})", param)
+        txt = f"{txt.group(1)}/{txt.group(2)} {txt.group(3)}"
+        self.__crmtemplate = txt
+
+
+class Vacina():
+    def __init__(self, nome, id=None):
+        self.__nome = nome
+        self.__id = id
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, param):
+        self.__id = param
+
+    @property
+    def nome(self):
+        return self.__nome
+
+    @nome.setter
+    def nome(self, param):
+        self.__nome = param
