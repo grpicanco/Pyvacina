@@ -72,5 +72,7 @@ CREATE TABLE "aplicacao"(
 cur.execute(sql)
 print('create table aplcacao')
 
+
+
 cur.close()
 conn.close()

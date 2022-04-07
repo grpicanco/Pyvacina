@@ -1,4 +1,5 @@
-from datetime import datetime
+import time
+from datetime import datetime, date
 
 
 class Vacinado:
@@ -39,7 +40,7 @@ class Vacinado:
         return self.__dtNasciento
 
     @dtNascimento.setter
-    def dtNascimento(self, param: str):
+    def dtNascimento(self, param: datetime):
         self.__dtNasciento = param
 
     @property
@@ -47,13 +48,55 @@ class Vacinado:
         return self.__comorbidade
 
     @comorbidade.setter
-    def comorbidade(self, param: str):
+    def comorbidade(self, param: bool):
         self.__comorbidade = param
+
     @property
-    def qtdDose(self) -> bool:
+    def qtdDose(self) -> int:
         return self.__qtdDose
 
     @qtdDose.setter
-    def qtdDose(self, param: str):
+    def qtdDose(self, param: int):
         self.__qtdDose = param
+
+
+class Vacinador:
+    def __init__(self, nome, cpf, crm, dtNascimento):
+        self.__nome = nome
+        self.__cpf = cpf
+        self.__crm = crm
+        self.__dtNasciento = dtNascimento
+
+
+    @property
+    def nome(self) -> str:
+        return self.__nome
+
+    @nome.setter
+    def nome(self, param: str):
+        self.__nome = param
+
+    @property
+    def cpf(self) -> str:
+        return self.__cpf
+
+    @cpf.setter
+    def cpf(self, param: str):
+        self.__cpf = param
+
+    @property
+    def crm(self) -> str:
+        return self.__crm
+
+    @crm.setter
+    def crm(self, param: str):
+        self.__crm = param
+
+    @property
+    def dtNascimento(self) -> datetime:
+        return self.__dtNasciento
+
+    @dtNascimento.setter
+    def dtNascimento(self, param: datetime):
+        self.__dtNasciento = param
 

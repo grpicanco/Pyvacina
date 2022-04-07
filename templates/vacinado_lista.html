@@ -9,22 +9,26 @@
         <th>CNS</th>
         <th>Comorbidade</th>
         <th>Quant. Doses</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
     {% for vacinado in vacinados %}
     <tr>
         <td>{{ vacinado.nome }}</td>
-        <td>{{ vacinado.dtNascimento }}</td>
+        <td>{{ vacinado.dtNascimento.strftime('%d/%m/%Y') }}</td>
         <td>{{ vacinado.cpf }}</td>
         <td>{{ vacinado.cns }}</td>
-        <td>{{ vacinado.comorbidade }}</td>
+        <td>{{ 'Sim' if vacinado.comorbidade else 'Não' }}</td>
         <td>{{ vacinado.qtdDose }}</td>
+        <td>
+            <a href="{{ url_for('vacinado_editar', cns=vacinado.cns) }}">editar</a>
+            <a href="{{ url_for('vacinado_excluir', cns=vacinado.cns) }}">excluir</a>
+        </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-<form action="{{ url_for('novo')}}">
-    <button class="btn btn-primary" type="submit">Cadastrar</button>
-</form>
+    <a href="{{url_for('vacinado_novo')}}" class="btn btn-primary">Cadastrar</a>
+    <a href="{{url_for('index')}}" class="btn btn-dark">Voltar</a>
 {% endblock %}

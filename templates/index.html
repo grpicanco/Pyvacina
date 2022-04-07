@@ -1,0 +1,17 @@
+{% extends "templates.html" %}
+{% block conteudo %}
+    <div class="conteudo">
+        <div class="menu-principal">
+            <h1>Bem vindo ao PyVacinado</h1>
+            <nav>
+                <a href="{{url_for('vacinado')}}">Vacinado</a>
+                <a href="">Aplicação da Vacina</a>
+
+            </nav>
+            <nav>
+                <a href="{{url_for('vacinador')}}">Vacinador</a>
+                <a href="">Vacina</a>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

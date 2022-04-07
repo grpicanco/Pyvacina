@@ -1,6 +1,6 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-    <form action="{{ url_for('criar') }}" method="post">
+    <form action="{{ url_for('vacinado_criar') }}" method="post">
         <fieldset>
             <div class="form-group">
                 <label for="nome">Nome</label>
@@ -34,6 +34,7 @@
                 <input type="number" id="dose" name="dose" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+            <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
         </fieldset>
     </form>
 {% endblock %}
