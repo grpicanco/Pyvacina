@@ -1,6 +1,7 @@
 import time
 from datetime import datetime, date
 import re
+from enum import property
 
 
 class Vacinado:
@@ -132,3 +133,46 @@ class Vacina:
     @nome.setter
     def nome(self, param):
         self.__nome = param
+
+
+class Aplicacao:
+    def __init__(self, cns, crm, id_vacina, id= None, nome_cns=None, nome_crm=None, nome_vacina=None):
+        self.__id = id
+        self.__cns = cns
+        self.__crm = crm
+        self.__id_vacina = id_vacina
+        self.nome_cns = nome_cns
+        self.nome_crm = nome_crm
+        self.nome_vacina = nome_vacina
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, value):
+        self.__id = value
+
+    @property
+    def cns(self):
+        return self.__cns
+
+    @cns.setter
+    def cns(self, value):
+        self.__cns = value
+
+    @property
+    def crm(self):
+        return self.__crm
+
+    @crm.setter
+    def crm(self, values):
+        self.__crm = values
+
+    @property
+    def id_vacina(self):
+        return self.__id_vacina
+
+    @id_vacina.setter
+    def id_vacina(self, values):
+        self.__id_vacina = values
