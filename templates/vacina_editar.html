@@ -1,0 +1,13 @@
+{% extends "templates.html" %}
+{% block conteudo %}
+    <form action="{{ url_for('vacina_atualizar', id=vacina.id) }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" class="form-control" value="{{vacina.nome}}">
+            </div>
+            <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+            <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
+        </fieldset>
+    </form>
+{% endblock %}

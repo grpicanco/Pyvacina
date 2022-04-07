@@ -112,7 +112,7 @@ class Vacinador:
         self.__crmtemplate = txt
 
 
-class Vacina():
+class Vacina:
     def __init__(self, nome, id=None):
         self.__nome = nome
         self.__id = id

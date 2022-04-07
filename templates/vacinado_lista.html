@@ -22,8 +22,8 @@
         <td>{{ 'Sim' if vacinado.comorbidade else 'Não' }}</td>
         <td>{{ vacinado.qtdDose }}</td>
         <td>
-            <a href="{{ url_for('vacinado_editar', cns=vacinado.cns) }}">editar</a>
-            <a href="{{ url_for('vacinado_excluir', cns=vacinado.cns) }}">excluir</a>
+            <a href="{{ url_for('vacinado_editar', cns=vacinado.cns) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('vacinado_excluir', cns=vacinado.cns) }}" class="btn btn-danger">excluir</a>
         </td>
     </tr>
     {% endfor %}
