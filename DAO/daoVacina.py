@@ -31,7 +31,7 @@ class VacinaDao:
         cursor.execute(SQL_VACINA_POR_ID, (id,))
         tupla = cursor.fetchone()
         if tupla:
-            return Vacina(nome=tupla[1], id=tupla[0])
+            return Vacina(id=tupla[0], nome=tupla[1])
         return False
 
     def deletar(self, id):

@@ -1,8 +1,6 @@
 import time
 from datetime import datetime, date
 import re
-from enum import property
-
 
 class Vacinado:
     def __init__(self, nome, cpf, cns, dtNascimento, comorbidade, qtdDose):
@@ -136,14 +134,16 @@ class Vacina:
 
 
 class Aplicacao:
-    def __init__(self, cns, crm, id_vacina, id= None, nome_cns=None, nome_crm=None, nome_vacina=None):
+    def __init__(self, cns, crm, id_vacina, data, id=None, vacina_nome=None, vacinador_nome=None, vacinado_nome=None, crm_template=None):
         self.__id = id
         self.__cns = cns
         self.__crm = crm
+        self.__crm_template = crm_template
         self.__id_vacina = id_vacina
-        self.nome_cns = nome_cns
-        self.nome_crm = nome_crm
-        self.nome_vacina = nome_vacina
+        self.__dtaplicacao = data
+        self.__vacina_nome = vacina_nome
+        self.__vacinador_nome = vacinador_nome
+        self.__vacinado_nome = vacinado_nome
 
     @property
     def id(self):
@@ -176,3 +176,46 @@ class Aplicacao:
     @id_vacina.setter
     def id_vacina(self, values):
         self.__id_vacina = values
+
+    @property
+    def dtaplicacao(self):
+        return self.__dtaplicacao
+
+    @dtaplicacao.setter
+    def dtaplicacao(self, values):
+        self.__dtaplicacao = values
+
+    @property
+    def vacina_nome(self):
+        return self.__vacina_nome
+
+    @vacina_nome.setter
+    def vacina_nome(self, values):
+        self.__vacina_nome = values
+
+    @property
+    def vacinador_nome(self):
+        return self.__vacinador_nome
+
+    @vacinador_nome.setter
+    def vacinador_nome(self, values):
+        self.__vacinador_nome = values
+
+    @property
+    def vacinado_nome(self):
+        return self.__vacinado_nome
+
+    @vacinado_nome.setter
+    def vacinado_nome(self, values):
+        self.__vacinado_nome = values
+
+    @property
+    def crm_template(self):
+        return self.__crm_template
+
+    @crm_template.setter
+    def crm_template(self, values):
+        self.__crm_template = values
+
+    def __str__(self):
+        return str(self.id) + '|' + str(self.id_vacina) + '|' + self.crm + '|' + str(self.cns)

@@ -1,11 +1,14 @@
-import sqlite3
-from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, flash
-from DAO.daoVacinador import VacinadorDao
-from DAO.daoVacinado import VacinadoDao
-from DAO.daoVacina import VacinaDao
-from model import Vacinado, Vacinador, Vacina
 import re
+import sqlite3
+from datetime import datetime
+
+from flask import Flask, render_template, request, redirect, url_for, flash
+
+from DAO.daoAplicacao import AplicacaoDao
+from DAO.daoVacina import VacinaDao
+from DAO.daoVacinado import VacinadoDao
+from DAO.daoVacinador import VacinadorDao
+from model import Vacinado, Vacinador, Vacina, Aplicacao
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -15,6 +18,7 @@ db = sqlite3.connect(FILE, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_
 vacinado_dao = VacinadoDao(db)
 vacinador_dao = VacinadorDao(db)
 vacina_dao = VacinaDao(db)
+aplicacao_dao = AplicacaoDao(db)
 
 
 @app.route('/')
@@ -76,8 +80,6 @@ def vacinado_excluir(cns):
 @app.route('/vacinador')
 def vacinador():
     lista = vacinador_dao.listar()
-    for vacinador in lista:
-        vacinador.crmtemplate = vacinador.crm
     return render_template('vacinador_lista.html', titulo="Lista de vacinadores", vacinadores=lista)
 
 
@@ -168,5 +170,58 @@ def vacina_excluir(id):
     vacina_dao.deletar(id)
     return redirect(url_for('vacina'))
 
+
+@app.route('/aplicacao')
+def aplicacao():
+    lista = aplicacao_dao.listar()
+    aplicacoes = []
+
+    for aplicacao in lista:
+        aplicacao = campos_aplicacao(aplicacao, crm=aplicacao.crm, cns=aplicacao.cns, id_vacina=aplicacao.id_vacina)
+        aplicacoes.append(aplicacao)
+
+    return render_template('aplicacao_list.html', titulo='Aplicações de Vacinas', aplicacoes=aplicacoes)
+
+
+@app.route('/aplicacao/novo')
+def aplicacao_novo():
+    lista_vacina = vacina_dao.listar()
+    lista_vacinador = vacinador_dao.listar()
+    lista_vacinado = vacinado_dao.listar()
+
+    return render_template("aplicacao_novo.html", titulo="Nova Aplicacao.", vacinas=lista_vacina,
+                           vacinadores=lista_vacinador, vacinados=lista_vacinado)
+
+
+@app.route('/aplicacao/criar', methods=['POST', ])
+def aplicacao_criar():
+    id_vacina = request.form['vacina']
+    cns = request.form['vacinado']
+    crm = request.form['vacinador']
+    data = datetime.now().date()
+    aplicacao = Aplicacao(id_vacina=id_vacina, cns=cns, crm=crm, data=data)
+    aplicacao_dao.salvar(aplicacao)
+    return redirect(url_for('aplicacao'))
+
+def campos_aplicacao(aplicacao, crm, cns, id_vacina):
+    vacinador = vacinador_dao.busca_por_crm(crm)
+    vacinado = vacinado_dao.busca_por_cns(cns)
+    vacina = vacina_dao.busca_por_id(id_vacina)
+    vacinador.crmtemplate = vacinador.crm
+    aplicacao.crm_template = vacinador.crmtemplate
+    aplicacao.vacinador_nome = vacinador.nome
+    aplicacao.vacina_nome = vacina.nome
+    aplicacao.vacinado_nome = vacinado.nome
+
+    return aplicacao
+
+@app.route('/aplicacao/editar/<int:id>')
+def aplicacao_editar(id):
+    aplicacao = aplicacao_dao.busca_por_id(id)
+    lista_vacina = vacina_dao.busca_por_id(aplicacao.id_vacina)
+    lista_vacinador = vacinador_dao.busca_por_crm(aplicacao.crm)
+    lista_vacinado = vacinado_dao.busca_por_cns(aplicacao.cns)
+    aplicacao = campos_aplicacao(aplicacao, crm=aplicacao.crm, cns=aplicacao.cns, id_vacina=aplicacao.id_vacina)
+    return render_template("aplicacao_editar.html", aplicacao=aplicacao, vacinados=lista_vacinado, vacinadores=lista_vacinador, vacinas=lista_vacina)
 
 app.run(debug=True)

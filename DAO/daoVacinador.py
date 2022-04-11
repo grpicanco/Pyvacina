@@ -46,5 +46,7 @@ class VacinadorDao:
 
 def traduz_vacinadores(vacinadores):
     def cria_vacinadores_com_tupla(tupla):
-        return Vacinador(crm=tupla[0], cpf=tupla[1], nome=tupla[2], dtNascimento=tupla[3])
+        vacinador = Vacinador(crm=tupla[0], cpf=tupla[1], nome=tupla[2], dtNascimento=tupla[3])
+        vacinador.crmtemplate = tupla[0]
+        return vacinador
     return list(map(cria_vacinadores_com_tupla, vacinadores))

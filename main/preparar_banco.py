@@ -3,6 +3,7 @@ import sqlite3 as sql
 conn = sql.connect('../Pyvacina.db')
 
 cur = conn.cursor()
+cur.execute("DROP TABLE IF EXISTS vacina")
 
 cur.execute("DROP TABLE IF EXISTS vacinado")
 
@@ -35,7 +36,7 @@ CREATE TABLE "vacinador"(
 cur.execute(sql)
 print('create table vacinador')
 
-cur.execute("DROP TABLE IF EXISTS vacina")
+
 
 sql = '''
 CREATE TABLE "vacina"(

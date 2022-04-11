@@ -1,0 +1,32 @@
+{% extends "templates.html" %}
+{% block conteudo %}
+<table class="table table-striped table-responsive table-bordered">
+    <thead class="thead-default">
+    <tr>
+        <th>id</th>
+        <th>Vacina</th>
+        <th>Aplciador / CRM</th>
+        <th>Vacinado / CNS</th>
+        <th>Data de Aplicação</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for aplicacao in aplicacoes %}
+    <tr>
+        <td>{{ aplicacao.id }}</td>
+        <td>{{ aplicacao.vacina_nome }}</td>
+        <td>{{ aplicacao.vacinador_nome }} / {{aplicacao.crm}}</td>
+        <td>{{ aplicacao.vacinado_nome }} / {{aplicacao.cns}}</td>
+        <td>{{ aplicacao.data }}</td>
+        <td>
+            <a href="{{ url_for('aplicacao_editar', id= aplciacacao.id) }}" class="btn btn-warning">editar</a>
+            <a href="" class="btn btn-danger">excluir</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <a href="{{url_for('aplicacao_novo')}}" class="btn btn-primary">Cadastrar</a>
+    <a href="{{url_for('index')}}" class="btn btn-dark">Voltar</a>
+{% endblock %}
