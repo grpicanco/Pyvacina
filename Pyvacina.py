@@ -44,7 +44,7 @@ def vacinado_criar():
     cns = request.form['cns']
     dtnascimento = datetime.strptime(request.form['nascimento'], '%Y-%m-%d').date()
     comorbidade = eval(request.form['comorbidade'])
-    qtdDose = int(request.form['dose'])
+    qtdDose = int(0)
     vacinado = Vacinado(nome=nome, cpf=cpf, cns=cns, dtNascimento=dtnascimento, comorbidade=comorbidade,
                         qtdDose=qtdDose)
     vacinado_dao.salvar(vacinado)
@@ -53,11 +53,12 @@ def vacinado_criar():
 
 @app.route('/vacinado/atualizar/<string:cns>', methods=['POST', ])
 def vacinado_atualizar(cns):
+    vacinado = vacinado_dao.busca_por_cns(cns=cns)
     nome = request.form['nome']
     cpf = request.form['cpf']
     dtnascimento = datetime.strptime(request.form['nascimento'], '%Y-%m-%d').date()
     comorbidade = eval(request.form['comorbidade'])
-    qtdDose = int(request.form['dose'])
+    qtdDose = int(vacinado.qtdDose)
     vacinado = Vacinado(nome=nome, cpf=cpf, cns=cns, dtNascimento=dtnascimento, comorbidade=comorbidade,
                         qtdDose=qtdDose)
     vacinado_dao.salvar(vacinado)
@@ -203,6 +204,7 @@ def aplicacao_criar():
     aplicacao_dao.salvar(aplicacao)
     return redirect(url_for('aplicacao'))
 
+
 def campos_aplicacao(aplicacao, crm, cns, id_vacina):
     vacinador = vacinador_dao.busca_por_crm(crm)
     vacinado = vacinado_dao.busca_por_cns(cns)
@@ -215,13 +217,32 @@ def campos_aplicacao(aplicacao, crm, cns, id_vacina):
 
     return aplicacao
 
+
 @app.route('/aplicacao/editar/<int:id>')
 def aplicacao_editar(id):
     aplicacao = aplicacao_dao.busca_por_id(id)
-    lista_vacina = vacina_dao.busca_por_id(aplicacao.id_vacina)
-    lista_vacinador = vacinador_dao.busca_por_crm(aplicacao.crm)
-    lista_vacinado = vacinado_dao.busca_por_cns(aplicacao.cns)
-    aplicacao = campos_aplicacao(aplicacao, crm=aplicacao.crm, cns=aplicacao.cns, id_vacina=aplicacao.id_vacina)
-    return render_template("aplicacao_editar.html", aplicacao=aplicacao, vacinados=lista_vacinado, vacinadores=lista_vacinador, vacinas=lista_vacina)
+    lista_vacina = vacina_dao.listar()
+    lista_vacinador = vacinador_dao.listar()
+    lista_vacinado = vacinado_dao.listar()
+    return render_template("aplicacao_editar.html", aplicacao=aplicacao, vacinados=lista_vacinado,
+                           vacinadores=lista_vacinador, vacinas=lista_vacina)
+
+
+@app.route('/aplicacao/atualizar/<int:id>', methods=['POST', ])
+def aplicacao_atualizar(id):
+    id_vacina = request.form['vacina']
+    cns = request.form['vacinado']
+    crm = request.form['vacinador']
+    data = datetime.now().date()
+    aplicacao = Aplicacao(id_vacina=id_vacina, cns=cns, crm=crm, data=data, id=id)
+    aplicacao_dao.salvar(aplicacao)
+    return redirect(url_for("aplicacao"))
+
+
+@app.route('/aplicacao/excluir/<int:value>')
+def aplicacao_excluir(value):
+    aplicacao_dao.deletar(value)
+    return redirect( url_for('aplicacao') )
+
 
 app.run(debug=True)

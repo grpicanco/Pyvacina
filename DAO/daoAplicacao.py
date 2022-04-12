@@ -5,6 +5,7 @@ SQL_APLICACAO_POR_ID = "SELECT id, cns, crm, id_vacina, data FROM aplicacao a wh
 SQL_ATUALIZA_APLICACAO = 'UPDATE aplicacao SET id=?, cns=?, crm=?, id_vacina=?, data=? where id = ?'
 SQL_BUSCA_APLICACAO = 'SELECT id, cns, crm, id_vacina, data FROM aplicacao;'
 SQL_CRIA_APLICACAO = 'INSERT into aplicacao (cns,crm, id_vacina, data) values (?, ?, ?, ?);'
+SQL_UPDATE_QTDOSE = "update vacinado set qtdDose = (select count(a.cns) from aplicacao a where a.cns = ? group by a.cns) where vacinado.cns = ?;"
 
 
 class AplicacaoDao:
@@ -16,9 +17,11 @@ class AplicacaoDao:
         if self.existe(aplicacao):
             cursor.execute(SQL_ATUALIZA_APLICACAO, (
                 aplicacao.id, aplicacao.cns, aplicacao.crm, aplicacao.id_vacina, aplicacao.dtaplicacao, aplicacao.id))
+            cursor.execute(SQL_UPDATE_QTDOSE, (aplicacao.cns, aplicacao.cns))
         else:
             cursor.execute(SQL_CRIA_APLICACAO,
                            (aplicacao.cns, aplicacao.crm, aplicacao.id_vacina, aplicacao.dtaplicacao))
+            cursor.execute(SQL_UPDATE_QTDOSE, (aplicacao.cns, aplicacao.cns))
         self.__db.commit()
         return aplicacao
 
@@ -50,4 +53,5 @@ def traduz_aplicacao(aplicacao):
     def cria_aplicacao_com_tupla(tupla):
         return Aplicacao(id=tupla[0], cns=tupla[1], crm=tupla[2],
                          id_vacina=tupla[3], data=tupla[4])
+
     return list(map(cria_aplicacao_com_tupla, aplicacao))

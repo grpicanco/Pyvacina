@@ -59,13 +59,13 @@ CREATE TABLE "aplicacao"(
     "data" DATE,
     FOREIGN KEY (cns) REFERENCES vacinado(cns)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE,
+        ON UPDATE RESTRICT ,
     FOREIGN KEY (crm) REFERENCES vacinador(crm)
         ON DELETE RESTRICT 
-        ON UPDATE CASCADE,
+        ON UPDATE RESTRICT,
     FOREIGN KEY (id_vacina) REFERENCES vacina(id)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE
+        ON UPDATE RESTRICT
 );
 '''
 

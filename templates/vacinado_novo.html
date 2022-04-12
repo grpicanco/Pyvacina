@@ -1,40 +1,53 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-    <form action="{{ url_for('vacinado_criar') }}" method="post">
-        <fieldset>
-            <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" class="form-control">
+<form action="{{ url_for('vacinado_criar') }}" method="post" class="needs-validation" novalidate>
+    <div class="form-group has-validation">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" class="form-control" aria-describedby="inputGroupPrepend" required>
+        <div class="invalid-feedback">
+            Insira um Nome.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" name="cpf" class="form-control" required>
+        <div class="invalid-feedback">
+            Insira um CPF.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cns">CNS</label>
+        <input type="text" id="cns" name="cns" class="form-control" required>
+        <div class="invalid-feedback">
+            Insira um CNS.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="nascimento">Data de Nascimento</label>
+        <input type="date" id="nascimento" name="nascimento" class="form-control" required>
+        <div class="invalid-feedback">
+            Insira sua data de nascimento.
+        </div>
+    </div>
+    <div class="form-check-inline">
+        <labe for="comorbidadeTrue">Comorbidade:</labe>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="comorbidadeTrue" name="comorbidade" value="True" required>
+            <label for="comorbidadeTrue">Sim</label>
+            <div class="invalid-feedback">
+                Selecione uma das opções.
             </div>
-            <div class="form-group">
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="cns">CNS</label>
-                <input type="text" id="cns" name="cns" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="nascimento">Data de Nascimento</label>
-                <input type="date" id="nascimento" name="nascimento" class="form-control">
-            </div>
-            <div>
-                <labe>Comorbidade:</labe>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="comorbidadeTrue" name="comorbidade" value="True">
-                    <label for="comorbidadeTrue">Sim</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="comorbidadeFalse" name="comorbidade" value="False">
-                    <label for="comorbidadeFalse">Não</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="dose">Quantidade de Dose</label>
-                <input type="number" id="dose" name="dose" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
-            <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
-        </fieldset>
-    </form>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="comorbidadeFalse" name="comorbidade" value="False"
+                   required>
+            <label for="comorbidadeFalse">Não</label>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+        <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
+    </div>
+</form>
+{% include "script.html"%}
 {% endblock %}

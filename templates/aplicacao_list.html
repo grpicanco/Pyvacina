@@ -20,8 +20,8 @@
         <td>{{ aplicacao.vacinado_nome }} / {{aplicacao.cns}}</td>
         <td>{{ aplicacao.data }}</td>
         <td>
-            <a href="{{ url_for('aplicacao_editar', id= aplciacacao.id) }}" class="btn btn-warning">editar</a>
-            <a href="" class="btn btn-danger">excluir</a>
+            <a href="{{ url_for('aplicacao_editar', id = aplicacao.id) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('aplicacao_excluir', value = aplicacao.id) }}" class="btn btn-danger">excluir</a>
         </td>
     </tr>
     {% endfor %}
