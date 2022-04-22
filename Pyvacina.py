@@ -3,6 +3,7 @@ import sqlite3
 from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
+from tests.testVacina import vacinaTeste
 
 from DAO.daoAplicacao import AplicacaoDao
 from DAO.daoVacina import VacinaDao
@@ -29,12 +30,12 @@ def index():
 @app.route('/vacinado')
 def vacinado():
     lista = vacinado_dao.listar()
-    return render_template('vacinado_lista.html', titulo='Vacinados', vacinados=lista)
+    return render_template('vacinado/vacinado_lista.html', titulo='Vacinados', vacinados=lista)
 
 
 @app.route('/vacinado/novo')
 def vacinado_novo():
-    return render_template('vacinado_novo.html', titulo='Novo Vacinado')
+    return render_template('vacinado/vacinado_novo.html', titulo='Novo Vacinado')
 
 
 @app.route('/criarVacinado', methods=['POST', ])
@@ -68,7 +69,7 @@ def vacinado_atualizar(cns):
 @app.route('/vacinado/editar/<string:cns>')
 def vacinado_editar(cns):
     vacinado = vacinado_dao.busca_por_cns(cns)
-    return render_template('vacinado_editar.html', titulo='Editando Vacinado', vacinado=vacinado)
+    return render_template('vacinado/vacinado_editar.html', titulo='Editando Vacinado', vacinado=vacinado)
 
 
 @app.route('/excluir/<string:cns>')
@@ -81,12 +82,12 @@ def vacinado_excluir(cns):
 @app.route('/vacinador')
 def vacinador():
     lista = vacinador_dao.listar()
-    return render_template('vacinador_lista.html', titulo="Lista de vacinadores", vacinadores=lista)
+    return render_template('vacinador/vacinador_lista.html', titulo="Lista de vacinadores", vacinadores=lista)
 
 
 @app.route('/vacinador/novo')
 def vacinador_novo():
-    return render_template("vacinador_novo.html", titulo="Novo vacinador")
+    return render_template("vacinador/vacinador_novo.html", titulo="Novo vacinador")
 
 
 @app.route('/vacinador/criar', methods=['POST', ])
@@ -124,7 +125,7 @@ def add_crm_banco(param: str) -> str:
 def vacinador_editar(crm):
     vacinador = vacinador_dao.busca_por_crm(crm)
     vacinador.crmtemplate = vacinador.crm
-    return render_template("vacinador_editar.html", titulo="Editando Vacinador", vacinador=vacinador)
+    return render_template("vacinador/vacinador_editar.html", titulo="Editando Vacinador", vacinador=vacinador)
 
 
 @app.route('/vacinador/excluir/<string:crm>')
@@ -136,18 +137,18 @@ def vacinador_excluir(crm):
 @app.route('/vacina')
 def vacina():
     lista = vacina_dao.listar()
-    return render_template("vacina_lista.html", titulo="Lista de Vacinas", vacinas=lista)
+    return render_template("vacina/vacina_lista.html", titulo="Lista de Vacinas", vacinas=lista)
 
 
 @app.route('/vacina/novo')
 def vacina_novo():
-    return render_template("vacina_novo.html", titulo="Nova Vacina.")
+    return render_template("vacina/vacina_novo.html", titulo="Nova Vacina.")
 
 
 @app.route('/vacina/criar', methods=['POST', ])
 def vacina_criar():
     nome = request.form['nome']
-    vacina = Vacina(nome=nome)
+    vacina = vacinaTeste(nome)
     vacina_dao.salvar(vacina)
     return redirect(url_for('vacina'))
 
@@ -155,7 +156,7 @@ def vacina_criar():
 @app.route('/vacina/editar/<int:id>')
 def vacina_editar(id):
     vacina = vacina_dao.busca_por_id(id)
-    return render_template("vacina_editar.html", vacina=vacina)
+    return render_template("vacina/vacina_editar.html", vacina=vacina)
 
 
 @app.route('/vacina/atualiza/<int:id>', methods=['POST', ])
@@ -181,7 +182,7 @@ def aplicacao():
         aplicacao = campos_aplicacao(aplicacao, crm=aplicacao.crm, cns=aplicacao.cns, id_vacina=aplicacao.id_vacina)
         aplicacoes.append(aplicacao)
 
-    return render_template('aplicacao_list.html', titulo='Aplicações de Vacinas', aplicacoes=aplicacoes)
+    return render_template('aplicacao/aplicacao_list.html', titulo='Aplicações de Vacinas', aplicacoes=aplicacoes)
 
 
 @app.route('/aplicacao/novo')
@@ -190,7 +191,7 @@ def aplicacao_novo():
     lista_vacinador = vacinador_dao.listar()
     lista_vacinado = vacinado_dao.listar()
 
-    return render_template("aplicacao_novo.html", titulo="Nova Aplicacao.", vacinas=lista_vacina,
+    return render_template("aplicacao/aplicacao_novo.html", titulo="Nova Aplicacao.", vacinas=lista_vacina,
                            vacinadores=lista_vacinador, vacinados=lista_vacinado)
 
 
@@ -224,7 +225,7 @@ def aplicacao_editar(id):
     lista_vacina = vacina_dao.listar()
     lista_vacinador = vacinador_dao.listar()
     lista_vacinado = vacinado_dao.listar()
-    return render_template("aplicacao_editar.html", aplicacao=aplicacao, vacinados=lista_vacinado,
+    return render_template("aplicacao/aplicacao_editar.html", aplicacao=aplicacao, vacinados=lista_vacinado,
                            vacinadores=lista_vacinador, vacinas=lista_vacina)
 
 
@@ -242,7 +243,22 @@ def aplicacao_atualizar(id):
 @app.route('/aplicacao/excluir/<int:value>')
 def aplicacao_excluir(value):
     aplicacao_dao.deletar(value)
-    return redirect( url_for('aplicacao') )
+    return redirect(url_for('aplicacao'))
+
+
+@app.route('/aplicacao/filtro/', methods=['POST', ])
+def aplicacao_filtro():
+    cpf = request.form['cpf']
+    aplicacoes = []
+    lista = aplicacao_dao.buscar_por_cpf(cpf)
+
+    if lista:
+        for aplicacao in lista:
+            aplicacao = campos_aplicacao(aplicacao, crm=aplicacao.crm, cns=aplicacao.cns, id_vacina=aplicacao.id_vacina)
+            aplicacoes.append(aplicacao)
+        return render_template('aplicacao/aplicacao_list.html', titulo='Aplicações de Vacinas', aplicacoes=aplicacoes)
+    else:
+        return redirect(url_for('aplicacao'))
 
 
 app.run(debug=True)

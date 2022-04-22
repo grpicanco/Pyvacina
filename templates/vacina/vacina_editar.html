@@ -1,0 +1,17 @@
+{% extends "templates.html" %}
+{% block conteudo %}
+<form action="{{ url_for('vacina_atualizar', id=vacina.id) }}" method="post" class="needs-validation" novalidate>
+    <fieldset>
+        <div class="form-group has-validation">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" class="form-control" value="{{vacina.nome}}" required>
+            <div class="invalid-feedback">
+                Insira uma vacina.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+        <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
+    </fieldset>
+</form>
+{% include "script.html"%}
+{% endblock %}

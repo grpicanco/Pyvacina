@@ -6,6 +6,7 @@ SQL_ATUALIZA_APLICACAO = 'UPDATE aplicacao SET id=?, cns=?, crm=?, id_vacina=?, 
 SQL_BUSCA_APLICACAO = 'SELECT id, cns, crm, id_vacina, data FROM aplicacao;'
 SQL_CRIA_APLICACAO = 'INSERT into aplicacao (cns,crm, id_vacina, data) values (?, ?, ?, ?);'
 SQL_UPDATE_QTDOSE = "update vacinado set qtdDose = (select count(a.cns) from aplicacao a where a.cns = ? group by a.cns) where vacinado.cns = ?;"
+SQL_BUSCAR_POR_CPF = "SELECT a.id, a.cns, a.crm, a.id_vacina, a.data FROM aplicacao a INNER JOIN vacinado v on v.cns = a.cns where v.cpf like ?;"
 
 
 class AplicacaoDao:
@@ -37,6 +38,14 @@ class AplicacaoDao:
         tupla = cursor.fetchone()
         if tupla:
             return Aplicacao(id=tupla[0], cns=tupla[1], crm=tupla[2], id_vacina=tupla[3], data=tupla[4])
+        return False
+
+    def buscar_por_cpf(self, cpf):
+        cursor = self.__db.cursor()
+        cursor.execute(SQL_BUSCAR_POR_CPF, (cpf,))
+        aplicacao = traduz_aplicacao(cursor.fetchall())
+        if aplicacao:
+            return aplicacao
         return False
 
     def deletar(self, id):

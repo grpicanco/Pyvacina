@@ -1,6 +1,6 @@
-import time
-from datetime import datetime, date
 import re
+from datetime import datetime
+
 
 class Vacinado:
     def __init__(self, nome, cpf, cns, dtNascimento, comorbidade, qtdDose):
