@@ -7,6 +7,7 @@
         <th>Nascimento</th>
         <th>CPF</th>
         <th>CRM</th>
+        <th>Data de Nascimento</th>
         <th></th>
     </tr>
     </thead>
@@ -17,14 +18,15 @@
         <td>{{ vacinador.dtNascimento.strftime('%d/%m/%Y') }}</td>
         <td>{{ vacinador.cpf }}</td>
         <td>{{ vacinador.crmtemplate }}</td>
+        <td>{{ vacinador.dtNascimento.strftime('%d/%m/%Y') }}</td>
         <td>
-            <a href="{{ url_for('vacinador_editar', crm= vacinador.crm) }}" class="btn btn-warning">editar</a>
-            <a href="{{ url_for('vacinador_excluir', crm= vacinador.crm) }}" class="btn btn-danger">excluir</a>
+            <a href="{{ url_for('vacinador_route.vacinador_editar', crm= vacinador.crm) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('vacinador_route.vacinador_excluir', crm= vacinador.crm) }}" class="btn btn-danger">excluir</a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-    <a href="{{url_for('vacinador_novo')}}" class="btn btn-primary">Cadastrar</a>
-    <a href="{{url_for('index')}}" class="btn btn-dark">Voltar</a>
+    <a href="{{url_for('vacinador_route.vacinador_novo')}}" class="btn btn-primary">Cadastrar</a>
+    <a href="{{url_for('vacinaroute.index')}}" class="btn btn-dark">Voltar</a>
 {% endblock %}

@@ -14,13 +14,13 @@
         <td>{{ vacina.id }}</td>
         <td>{{ vacina.nome }}</td>
         <td>
-            <a href="{{ url_for('vacina_editar', id= vacina.id) }}" class="btn btn-warning">editar</a>
-            <a href="{{ url_for('vacina_excluir', id= vacina.id) }}" class="btn btn-danger">excluir</a>
+            <a href="{{ url_for('vacinaroute.vacina_editar', id= vacina.id) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('vacinaroute.vacina_excluir', id= vacina.id) }}" class="btn btn-danger">Excluir</a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-    <a href="{{url_for('vacina_novo')}}" class="btn btn-primary">Cadastrar</a>
-    <a href="{{url_for('index')}}" class="btn btn-dark">Voltar</a>
+    <a href="{{url_for('vacinaroute.vacina_novo')}}" class="btn btn-primary">Cadastrar</a>
+    <a href="{{url_for('vacinaroute.index')}}" class="btn btn-dark">Voltar</a>
 {% endblock %}

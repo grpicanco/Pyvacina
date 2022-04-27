@@ -1,11 +1,11 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-<form action="{{ url_for('aplicacao_filtro') }}" method="post" class="needs-validation" novalidate>
+<form action="{{ url_for('aplicacaoroute.aplicacao_filtro') }}" method="post" class="needs-validation" novalidate>
      <fieldset>
-        <div class="form-group has-validation">
-            <label for="cpf">Vacinado</label>
-            <input type="text" id="cpf" name="cpf" class="form-control" required>
-            <button type="submit" class="btn btn-primary btn-salvar">Buscar</button>
+        <div class="form-group has-validation" style="display: flex; margin: 5px;">
+            <label for="cpf"> Vacinado CPF: </label>
+            <input type="text" id="cpf" name="cpf" class="form-control" required style="height: 40px;">
+            <button type="submit" class="btn btn-primary btn-salvar" style="margin-left: 5px ">Buscar</button>
             <div class="invalid-feedback">
                 Insira uma vacina.
             </div>
@@ -18,7 +18,7 @@
         <th>id</th>
         <th>Vacina</th>
         <th>Aplciador / CRM</th>
-        <th>Vacinado / CNS</th>
+        <th>Vacinado / CPF</th>
         <th>Data de Aplicação</th>
         <th></th>
     </tr>
@@ -27,18 +27,18 @@
     {% for aplicacao in aplicacoes %}
     <tr>
         <td>{{ aplicacao.id }}</td>
-        <td>{{ aplicacao.vacina_nome }}</td>
-        <td>{{ aplicacao.vacinador_nome }} / {{aplicacao.crm}}</td>
-        <td>{{ aplicacao.vacinado_nome }} / {{aplicacao.cns}}</td>
-        <td>{{ aplicacao.data }}</td>
+        <td>{{ aplicacao.vacina.nome }}</td>
+        <td>{{ aplicacao.vacinador.nome }} / {{aplicacao.crm}}</td>
+        <td>{{ aplicacao.vacinado.nome }} / {{aplicacao.vacinado.cpf}}</td>
+        <td>{{ aplicacao.data.strftime('%d/%m/%Y') }}</td>
         <td>
-            <a href="{{ url_for('aplicacao_editar', id = aplicacao.id) }}" class="btn btn-warning">editar</a>
-            <a href="{{ url_for('aplicacao_excluir', value = aplicacao.id) }}" class="btn btn-danger">excluir</a>
+            <a href="{{ url_for('aplicacaoroute.aplicacao_editar', id = aplicacao.id) }}" class="btn btn-warning">editar</a>
+            <a href="{{ url_for('aplicacaoroute.aplicacao_excluir', id = aplicacao.id) }}" class="btn btn-danger">excluir</a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-    <a href="{{url_for('aplicacao_novo')}}" class="btn btn-primary">Cadastrar</a>
-    <a href="{{url_for('index')}}" class="btn btn-dark">Voltar</a>
+    <a href="{{url_for('aplicacaoroute.aplicacao_novo')}}" class="btn btn-primary">Cadastrar</a>
+    <a href="{{url_for('vacinaroute.index')}}" class="btn btn-dark">Voltar</a>
 {% endblock %}

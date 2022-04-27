@@ -1,6 +1,6 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-<form action="{{ url_for('vacinado_criar') }}" method="post" class="needs-validation" novalidate>
+<form action="{{ url_for('vacinadoroute.vacinado_criar') }}" method="post" class="needs-validation" novalidate>
     <div class="form-group has-validation">
         <label for="nome">Nome</label>
         <input type="text" id="nome" name="nome" class="form-control" aria-describedby="inputGroupPrepend" required>
@@ -29,7 +29,7 @@
             Insira sua data de nascimento.
         </div>
     </div>
-    <div class="form-check-inline has-validation">
+    <div class="form-group has-validation">
         <labe for="comorbidadeTrue">Comorbidade:</labe>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" id="comorbidadeTrue" name="comorbidade" value="True" required>
@@ -43,11 +43,11 @@
                 required>
             <label for="comorbidadeFalse">Não</label>
         </div>
-
+    </div>
 
         <div>
             <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
-            <a class="btn btn-danger" href="{{url_for('vacinado')}}">Cancelar</a>
+            <a class="btn btn-danger" href="{{url_for('vacinadoroute.vacinado')}}">Cancelar</a>
         </div>
 </form>
 {% include "script.html"%}

@@ -71,3 +71,12 @@ figcaption {
     text-align: right;
     top: 0;
 }
+
+.btn{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.form-group{
+    margin-top: 5px;
+}

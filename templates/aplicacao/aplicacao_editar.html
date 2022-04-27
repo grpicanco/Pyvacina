@@ -1,6 +1,6 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-<form action="{{ url_for('aplicacao_atualizar', id=aplicacao.id) }}" method="post" class="needs-validation" novalidate>
+<form action="{{ url_for('aplicacaoroute.aplicacao_atualizar', id=aplicacao.id) }}" method="post" class="needs-validation" novalidate>
     <fieldset>
         <div class="form-group has-validation">
             <label for="vacina">Vacina aplicada:</label>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
-        <a class="btn btn-danger" href="{{url_for('aplicacao')}}">Cancelar</a>
+        <a class="btn btn-danger" href="{{url_for('aplicacaoroute.aplicacao')}}">Cancelar</a>
     </fieldset>
 </form>
 {% include "script.html"%}

@@ -1,6 +1,6 @@
 {% extends "templates.html" %}
 {% block conteudo %}
-<form action="{{ url_for('vacinado_atualizar', cns=vacinado.cns) }}" method="post" class="needs-validation" novalidate>
+<form action="{{ url_for('vacinadoroute.vacinado_atualizar', cns=vacinado.cns) }}" method="post" class="needs-validation" novalidate>
     <fieldset>
         <div class="form-group has-validation">
             <label for="nome">Nome</label>
@@ -24,7 +24,7 @@
                 Insira sua data de nascimento.
             </div>
         </div>
-        <div>
+        <div class="form-group has-validation">
             <labe>Comorbidade:</labe>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="comorbidadeTrue" name="comorbidade" value="True" {% if
@@ -36,7 +36,6 @@
                     if not vacinado.comorbidade %} checked {% endif %} required>
                 <label for="comorbidadeFalse">Não</label>
             </div>
-
         </div>
         <div class="form-group">
             <label for="dose">Quantidade de Dose</label>
@@ -44,7 +43,7 @@
         </div>
         <div>
             <button type="submit" class="btn btn-primary btn-salvar">Atualizar</button>
-            <a href="{{url_for('vacinado')}}" class="btn btn-danger">Cancelar</a>
+            <a href="{{url_for('vacinadoroute.vacinado')}}" class="btn btn-danger">Cancelar</a>
         </div>
     </fieldset>
 </form>
