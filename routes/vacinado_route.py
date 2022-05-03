@@ -1,5 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+
+from Test.vacinadoTest import VacinadoTest
 from extensions import db
 from models.vacinado import Vacinado
 
@@ -25,11 +27,17 @@ def vacinado_criar():
     dtnascimento = datetime.strptime(request.form['nascimento'], '%Y-%m-%d').date()
     comorbidade = eval(request.form['comorbidade'])
     qtdDose = int(0)
-    vacinado = Vacinado(nome=nome, cpf=cpf, cns=cns, dtNascimento=dtnascimento, comorbidade=comorbidade,
-                        qtdDose=qtdDose)
-    db.session.add(vacinado)
-    db.session.commit()
-    return redirect(url_for('vacinadoroute.vacinado'))
+
+    vacinadoTest = VacinadoTest(nome=nome, cpf=cpf, cns=cns, dtnascimento=dtnascimento, comorbidade=comorbidade,
+                                qtdDose=qtdDose)
+
+    if vacinadoTest.value:
+        db.session.add(vacinadoTest.vacinado)
+        db.session.commit()
+        return redirect(url_for('vacinadoroute.vacinado'))
+    else:
+        flash(vacinadoTest.vacinado, 'alert-danger')
+        return redirect(url_for('vacinadoroute.vacinado_novo'))
 
 
 @vacinadoroute.route('/vacinado/atualizar/<string:cns>', methods=['POST', ])
@@ -57,7 +65,7 @@ def vacinado_excluir(cns):
         vacinado = Vacinado.query.filter_by(cns=cns).first()
         db.session.delete(vacinado)
         db.session.commit()
-        flash(f'O  Vacinado {cns} foi deletado com sucesso!')
+        flash(f'O  Vacinado {cns} foi deletado com sucesso!', 'alert-success')
     except KeyError as key:
         raise ValueError(key)
 

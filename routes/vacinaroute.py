@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from Test.vacinaTest import VacinaTest
 from extensions import db
 from models.vacina import Vacina
 
@@ -16,18 +17,23 @@ def vacina():
     return render_template('vacina/vacina_lista.html', titulo="Vacinas", vacinas=vacinas)
 
 
-@vacinaroute.route('/vacina/novo')
+@vacinaroute.route('/vacina/novo/')
 def vacina_novo():
-    return render_template("vacina/vacina_novo.html", titulo="Nova Vacina.")
+    return render_template("vacina/vacina_novo.html", titulo="Nova Vacina")
 
 
 @vacinaroute.route('/vacina/criar', methods=['POST', ])
 def vacina_criar():
     nome = request.form['nome']
-    vacina = Vacina(nome=nome)
-    db.session.add(vacina)
-    db.session.commit()
-    return redirect(url_for('vacinaroute.vacina'))
+    vacinaTest = VacinaTest(nome=nome)
+    if vacinaTest.value:
+        vacina = Vacina(nome=vacinaTest.text)
+        db.session.add(vacina)
+        db.session.commit()
+        return redirect(url_for('vacinaroute.vacina'))
+    else:
+        flash(str(vacinaTest.text), 'alert-danger')
+        return redirect(url_for('vacinaroute.vacina_novo'))
 
 
 @vacinaroute.route('/vacina/editar/<id>')
